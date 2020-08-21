@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from mentirinha import views
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('list', views.list_all, name='list'),
+    path('<short_code>', views.redirect_to)
 ]
