@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from mentirinha.models import ShortenedUrl
+
+
+@admin.register(ShortenedUrl)
+class ShortenedUrlAdmin(admin.ModelAdmin):
+    readonly_fields = ['accesses']
+    pass
