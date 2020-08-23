@@ -14,4 +14,6 @@ def list_all(request):
 
 def redirect_to(request, short_code):
     shortened_url = get_object_or_404(ShortenedUrl, short_code=short_code)
+    shortened_url.accesses += 1
+    shortened_url.save()
     return redirect(shortened_url.original_url)
