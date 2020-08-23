@@ -20,12 +20,16 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')sb6pwshw+p1$g8a&d$w-ug&+^adr=4^h=r-d3qurv&+(a1*gm'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = []
+"""
+Changed in Django 3.1:
+If ALLOWED_HOSTS is empty and DEBUG=True, subdomains of localhost were allowed
+"""
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', [])
 
 
 # Application definition
@@ -111,6 +115,13 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler'
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 10,  # 10mb
+            'backupCount': 10,
+            'filename': os.getenv('DJANGO_LOG_FILE', './mentira.log'),
+        }
     },
     'loggers': {
         'django.db.backends': {
