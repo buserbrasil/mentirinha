@@ -1,0 +1,12 @@
+[
+  {
+    "model": "mentirinha.shortenedurl",
+    "pk": 1,
+    "fields": {
+      "short_code": "cometanuncamais",
+      "original_url": "https://www.buser.com.br",
+      "accesses": 0,
+      "created_at": "2020-08-20T18:16:59.357Z"
+    }
+  }
+]
