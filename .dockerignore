@@ -1,0 +1,9 @@
+docker/
+.idea/
+.git/
+.dockerignore
+.gitignore
+.python-version
+Dockerfile
+mentirinha.env
+dev.sh

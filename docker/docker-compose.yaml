@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  mentira:
+    container_name: "mentira_postgres"
+    image: postgres:12
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/dkdata/postgres-mentira:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=mentira
+      - POSTGRES_PASSWORD=mentira
+  web:
+    container_name: "mentira_django"
+    build: ..
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../mentirinha.env
+    depends_on:
+      - mentira

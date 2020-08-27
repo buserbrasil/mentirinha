@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', True)
+DEBUG = int(os.getenv('DJANGO_DEBUG', 1)) == 1
 
 """
 Changed in Django 3.1:
@@ -120,7 +120,7 @@ LOGGING = {
             'class': 'logging.handlers.RotatingFileHandler',
             'maxBytes': 1024 * 1024 * 10,  # 10mb
             'backupCount': 10,
-            'filename': os.getenv('DJANGO_LOG_FILE', './mentira.log'),
+            'filename': os.getenv('DJANGO_LOG_FILE', './mentirinha.log'),
         }
     },
     'loggers': {
@@ -151,3 +151,4 @@ BASE_URL = os.getenv('BASE_URL', 'http://localhost:8000')
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
