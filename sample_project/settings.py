@@ -29,8 +29,7 @@ DEBUG = int(os.getenv('DJANGO_DEBUG', 1)) == 1
 Changed in Django 3.1:
 If ALLOWED_HOSTS is empty and DEBUG=True, subdomains of localhost were allowed
 """
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', [])
-
+ALLOWED_HOSTS = list({'localhost'} | set(os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')))
 
 # Application definition
 
