@@ -12,7 +12,7 @@ def list_all(request):
     return JsonResponse(response)
 
 
-def redirect_to(request, short_code):
+def redirect_to(request, short_code=None):
     shortened_url = get_object_or_404(ShortenedUrl, short_code=short_code)
     shortened_url.accesses += 1
     shortened_url.save()
