@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 
 from mentirinha.models import ShortenedUrl
 
@@ -8,7 +8,6 @@ class TestMentirinha(TestCase):
 
     def setUp(self):
         self.url = ShortenedUrl.objects.get(pk=1)
-        self.client = Client()
 
     def test_existing_short_code_should_redirect_with_302(self):
         short_code = self.url.short_code
@@ -23,3 +22,9 @@ class TestMentirinha(TestCase):
         short_code = 'idontexist'
         r = self.client.get(f'/{short_code}')
         self.assertEqual(404, r.status_code)
+
+    def test_accesses_counter(self):
+        short_code = self.url.short_code
+        self.client.get(f'/{short_code}')
+        self.url.refresh_from_db()
+        self.assertEqual(1, self.url.accesses)
