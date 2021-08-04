@@ -14,9 +14,20 @@ services:
   web:
     container_name: "mentira_django"
     build: ..
+    command: "uwsgi --ini uwsgi.ini"
     ports:
       - "8000:8000"
     env_file:
       - ../mentirinha.env
     depends_on:
       - mentira
+  counter_updater:
+    build: ..
+    command: ./manage.py counter_updater
+    restart: unless-stopped
+    depends_on:
+      - mentira
+    env_file:
+      - ../mentirinha.env
+  redis:
+    image: redis:6.2.5

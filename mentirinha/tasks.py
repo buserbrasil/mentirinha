@@ -1,7 +1,10 @@
+from django.db.models import F, Value
+from django.db.models.functions import Coalesce
 from mentirinha import counter
+from mentirinha.models import ShortenedUrl
 
-# TODO: vai ser uma periodic task isso aqui
+
 def consume_counter():
     for url_id in counter.list_shortned_urls_ids():
-        counter = counter.getdel(url_id)
-        ShortenedUrl.objects.filter(pk=url_id).update(counter=F('counter') + 1)
+        count = counter.getdel(url_id)
+        ShortenedUrl.objects.filter(pk=url_id).update(accesses=Coalesce(F('accesses'), Value(0)) + count)

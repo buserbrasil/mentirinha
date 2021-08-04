@@ -151,3 +151,10 @@ BASE_URL = os.getenv('BASE_URL', 'http://localhost:8000')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
+
+REDIS_CONNECTION_PARAMS = {
+    'host': 'redis',
+    'charset': 'utf-8',
+    'decode_responses': True
+}
+REDIS_COUNTER_PREFIX = 'url'
