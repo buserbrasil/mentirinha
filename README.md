@@ -27,10 +27,9 @@ devidamente configurado, você precisaria de apenas três coisas:
 - Um banco de dados Postgres (um RDS na AWS, por exemplo). Recomendo a versão 12;
 - Um arquivo `mentirinha.env`, definindo no mínimo as mesmas variáveis de ambiente que o arquivo de exemplo contido
 neste repositório;
-- O pacote `docker` devidamente instalado e funcionando.
+- O pacote `docker` e `docker-compose` devidamente instalado e funcionando.
 
-Tendo isso, basta apenas executar o comando `docker run -d --env-file mentirinha.env -p $port:$port --name mentirinha buserbrasil/mentirinha`,
-onde `$port` é a porta que você quiser usar e pronto, você tem um mentirinha rodando.
+Tendo isso, basta apenas executar o comando `docker-compose up -d`.
 
 #### Louco, mas como faço algo com ele se tudo que ele expõe é um Django Admin?
 
