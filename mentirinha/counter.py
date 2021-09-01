@@ -8,7 +8,7 @@ def incr(url):
     return redis_client.incr(f'{settings.REDIS_COUNTER_PREFIX}_{url}')
 
 
-def list_shortned_urls_ids():
+def list_shortened_urls_ids():
     for key in redis_client.keys(f'{settings.REDIS_COUNTER_PREFIX}_*'):
         yield key[len(settings.REDIS_COUNTER_PREFIX) + 1:]
 

@@ -5,6 +5,6 @@ from mentirinha.models import ShortenedUrl
 
 
 def consume_counter():
-    for url_id in counter.list_shortned_urls_ids():
+    for url_id in counter.list_shortened_urls_ids():
         count = counter.getdel(url_id)
         ShortenedUrl.objects.filter(pk=url_id).update(accesses=Coalesce(F('accesses'), Value(0)) + count)
