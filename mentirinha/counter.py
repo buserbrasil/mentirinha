@@ -19,7 +19,6 @@ def getdel(url_id):
     pipeline.get(key)
     pipeline.delete(key)
     count, a = pipeline.execute()
-    print(key, count, a)
     return count
 
 # re-export
