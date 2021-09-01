@@ -3,6 +3,7 @@ services:
   mentirinha:
     build: .
     command: uwsgi --ini uwsgi.ini
+    restart: unless-stopped
     ports:
       - 8000:8000
     env_file: mentirinha.env
@@ -10,6 +11,7 @@ services:
   counter:
     build: .
     command: python manage.py counter_updater
+    restart: unless-stopped
     env_file: mentirinha.env
     depends_on: [redis]
   redis:
