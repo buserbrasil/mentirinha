@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect
 from mentirinha.models import ShortenedUrl
 from mentirinha import counter

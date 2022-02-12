@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 
 from mentirinha.models import ShortenedUrl
 from mentirinha import tasks, counter
@@ -9,7 +9,6 @@ class TestMentirinha(TestCase):
 
     def setUp(self):
         self.url = ShortenedUrl.objects.get(pk=1)
-        self.client = Client()
 
     def tearDown(self):
         # flush all pending urls
@@ -43,3 +42,9 @@ class TestMentirinha(TestCase):
         short_code = 'idontexist'
         r = self.client.get(f'/{short_code}')
         self.assertEqual(404, r.status_code)
+
+    def test_accesses_counter(self):
+        short_code = self.url.short_code
+        self.client.get(f'/{short_code}')
+        self.url.refresh_from_db()
+        self.assertEqual(1, self.url.accesses)
