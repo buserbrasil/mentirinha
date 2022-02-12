@@ -6,13 +6,13 @@ RUN mkdir -p /mentirinha
 
 WORKDIR "/mentirinha"
 
-COPY . .
+ADD requirements.txt /mentirinha
 
 RUN pip install -r requirements.txt && \
   rm -rf ~/.cache/pip
 
+COPY . .
+
 RUN mkdir -p /dkdata
 
 RUN ./manage.py collectstatic
-
-ENTRYPOINT [ "uwsgi", "--ini", "uwsgi.ini" ]
