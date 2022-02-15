@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "chart.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: web
+          command: ["uwsgi"]
+          args: ["--ini", "uwsgi.ini"]
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /__ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /__ping
+              port: http
+          resources:
+            {{- toYaml .Values.web.resources | nindent 12 }}
+          env:
+            - name: REDIS_HOST
+              value: "{{ .Values.redis.host }}"
+            - name: REDIS_DB
+              value: "{{ .Values.redis.db }}"
+            - name: REDIS_PREFIX
+              value: "{{ .Values.redis.prefix }}"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "{{ .Values.django.allowedHosts }}"
+            - name: DJANGO_DEBUG
+              value: "{{ .Values.django.debug }}"
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mentirinha
+                  key: DJANGO_SECRET_KEY
+            - name: DB_HOST
+              value: "{{ .Values.db.host }}"
+            - name: DB_NAME
+              value: "{{ .Values.db.name }}"
+            - name: DB_USER
+              value: "{{ .Values.db.user }}"
+            - name: DB_PORT
+              value: "{{ .Values.db.port }}"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mentirinha
+                  key: DB_PASSWORD
+        - name: worker
+          command: ["python"]
+          args: ["manage.py", "counter_updater"]
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          env:
+            - name: REDIS_HOST
+              value: "{{ .Values.redis.host }}"
+            - name: REDIS_DB
+              value: "{{ .Values.redis.db }}"
+            - name: REDIS_PREFIX
+              value: "{{ .Values.redis.prefix }}"
+            - name: DJANGO_DEBUG
+              value: "{{ .Values.django.debug }}"
+            - name: DB_HOST
+              value: "{{ .Values.db.host }}"
+            - name: DB_NAME
+              value: "{{ .Values.db.name }}"
+            - name: DB_USER
+              value: "{{ .Values.db.user }}"
+            - name: DB_PORT
+              value: "{{ .Values.db.port }}"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mentirinha
+                  key: DB_PASSWORD
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

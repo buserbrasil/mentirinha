@@ -17,3 +17,7 @@ def redirect_to(request, short_code=None):
     shortened_url = get_object_or_404(ShortenedUrl, short_code=short_code)
     counter.incr(shortened_url.id)
     return redirect(shortened_url.original_url)
+
+
+def ping(request):
+    return JsonResponse({"pong": True})
