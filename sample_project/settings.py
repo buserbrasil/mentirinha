@@ -153,8 +153,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
 
 REDIS_CONNECTION_PARAMS = {
-    'host': 'redis',
+    'host': os.getenv('REDIS_HOST', 'redis'),
+    'db': int(os.getenv('REDIS_DB', '0')),
     'charset': 'utf-8',
     'decode_responses': True
 }
-REDIS_COUNTER_PREFIX = 'url'
+REDIS_COUNTER_PREFIX = os.getenv('REDIS_PREFIX', 'url')
