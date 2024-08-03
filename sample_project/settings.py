@@ -86,7 +86,7 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '5432'),
         "OPTIONS": {
-            "application_name": os.getenv("APPLICATION_NAME", "mentirinha"),
+            "application_name": os.getenv("DB_APPLICATION_NAME", "mentirinha"),
         },
     }
 }
